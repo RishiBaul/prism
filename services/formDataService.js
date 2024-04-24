@@ -23,18 +23,25 @@ export const validateFormData = (data)=> {
         grocery: Joi.boolean().required(),
         landmark: Joi.string().required(),
         meat: Joi.boolean().required(),
-        phone: Joi.string().pattern(/^\d{10}$/).required(),
+        phone: Joi.string().pattern(/^\d{10}$/).required() .messages({
+            'string.pattern.base': 'Phone number must be exactly 10 digits long.'
+        }),
         preferredTime: Joi.array().items(Joi.string()).min(2).required(),
         products: Joi.array().items(Joi.object({
             preferredProducts: Joi.string().required(),
             orderFrequency: Joi.string().required(),
             quantity: Joi.string().required()
-        })).required(),
+        })).min(1).required(),
         roastedMeat: Joi.boolean().required(),
         seafood: Joi.boolean().required(),
         state: Joi.string().required(), // havent included all the states available but we can add all the name of the states to make it more validating
         tofu: Joi.boolean().required(),
-        zipCode: Joi.string().required()
+        zipCode: Joi.string()
+        .pattern(/^1\d{5}$/)
+        .required()
+        .messages({
+            'string.pattern.base': 'Zip code must be of USA and must start from 1'
+        }),
     });
 
     const { error } = schema.validate(data);
@@ -42,20 +49,21 @@ export const validateFormData = (data)=> {
     if (error) return { error };
 
     const { cookedFood, dimSum, general, grocery, meat, roastedMeat, seafood, tofu } = data;
+
     const booleanFields = [cookedFood, dimSum, general, grocery, meat, roastedMeat, seafood, tofu];
-    const trueCount = booleanFields.filter(field => field === true).length;
-    const atLeastOneTrue = trueCount > 0;
+    const atLeastOneTrue = booleanFields.some(field => field === true);
 
     if (!atLeastOneTrue) {
-        return { error: new ValidationError('At least one of the boolean fields (excluding preferredTime) must be true.') };
+        throw new ValidationError('At least one of the boolean fields (excluding preferredTime) must be true.') ;
     }
 
     return { value: data };
-}
+};
 
 export const saveFormData = async (data) => {
     try {
         const formData = new FormData(data);
+        console.log('formData',formData)
         await formData.save();
         return { message: 'Form data saved successfully' };
     } catch (error) {

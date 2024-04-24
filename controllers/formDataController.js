@@ -20,9 +20,10 @@ router.post('/submit', async (req, res) => {
         } else if (error instanceof DatabaseError) {
             console.error(error);
             res.status(500).send('Error saving form data');
-        } else {
-            console.error(error);
-            res.status(500).send('Internal Server Error');
+        }
+        else{
+            console.log(error)
+            res.send(500).send("Internal Server Error")
         }
     }
 });

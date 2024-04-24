@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-
 const formDataSchema = new mongoose.Schema({
     address1: { type: String, required: true },
     address2: { type: String, required: true },
@@ -46,6 +45,7 @@ const formDataSchema = new mongoose.Schema({
     zipCode: { type: String, required: true }
 });
 
-const FormData = mongoose.model('FormData', formDataSchema);
+const FormData= mongoose.model('FormData', formDataSchema);
+
 
 export default FormData;

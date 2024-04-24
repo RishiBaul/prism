@@ -13,7 +13,7 @@ if (process.env.MONGO_PORT && process.env.MONGO_URL && process.env.MONGO_DB) {
     MONGO_URI = `mongodb://${process.env.MONGO_USERNAME}${process.env.MONGO_PASSWORD}${process.env.MONGO_URL}:${process.env.MONGO_PORT}/${process.env.MONGO_DB}`;
 }
 else {
-    MONGO_URI = "mongodb://localhost:27017/prism";
+    MONGO_URI = "mongodb+srv://rishibaul:nirvana@nirvana.jsyr3iw.mongodb.net/prism";
 }
 
 console.log(MONGO_URI);
